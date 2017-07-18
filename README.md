@@ -19,7 +19,7 @@ In the `buildscript dependencies` section:
 In the `dependencies` section:
 
 ```groovy
-classpath "com.github.vimn-north:poeditor-gradle:-SNAPSHOT"
+classpath "com.github.dkorobtsov:poeditor-gradle:-SNAPSHOT"
 ```
 
 Include the plugin:
