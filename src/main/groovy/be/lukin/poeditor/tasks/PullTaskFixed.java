@@ -1,22 +1,19 @@
 package be.lukin.poeditor.tasks;
 
-import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
-
 import be.lukin.poeditor.Config;
 import be.lukin.poeditor.FileTypeEnum;
 import be.lukin.poeditor.FilterByEnum;
 import be.lukin.poeditor.models.Project;
 
-public final class PullTaskWithEmptyFileFix extends BaseTask {
+import java.io.File;
+import java.util.Arrays;
+
+public final class PullTaskFixed extends BaseTask {
 
     @Override
     public void handle() {
         System.out.println("Downloading translations");
         Config config = super.config;
-        Path current = Paths.get("");
         Project details = client.getProject(config.getProjectId());
 
         System.out.println("Project: " + details.name + " (id:" + details.id + ", type:" + config.getType() + ")");
@@ -24,7 +21,7 @@ public final class PullTaskWithEmptyFileFix extends BaseTask {
 
         for (String languageKey : config.getLanguageKeys()) {
             String path = config.getLanguage(languageKey);
-            File exportFile = new File(current.toAbsolutePath().toString(), path);
+            File exportFile = new File(System.getProperty("user.dir"), path);
             exportFile.getParentFile().mkdirs();
             FilterByEnum[] filters = config.getFilters(languageKey);
 

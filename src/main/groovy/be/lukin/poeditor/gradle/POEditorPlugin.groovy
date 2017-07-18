@@ -1,14 +1,10 @@
 package be.lukin.poeditor.gradle
 
-import be.lukin.poeditor.tasks.PullTaskWithEmptyFileFix;
-import be.lukin.poeditor.tasks.PushTask;
-import be.lukin.poeditor.tasks.PushTermsTask;
-import be.lukin.poeditor.tasks.InitTask;
-import be.lukin.poeditor.tasks.StatusTask;
-import org.gradle.api.DefaultTask;
-import org.gradle.api.Plugin;
+import be.lukin.poeditor.tasks.*
+import org.gradle.api.DefaultTask
+import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.tasks.TaskAction;
+import org.gradle.api.tasks.TaskAction
 
 class POEditorPlugin implements Plugin<Project> {
     public static final String GROUP = 'POEditor translations'
@@ -112,7 +108,7 @@ class InitTaskGradle extends DefaultTask {
     def initialize() {
         def project = this.getProject();
         POEditorExtension extension = project.poeditor;
-        new InitTask().configure(extension.toConfig()).handle();
+        new InitTaskFixed().configure(extension.toConfig()).handle();
     }
 }
 
@@ -121,7 +117,7 @@ class PullTaskGradle extends DefaultTask {
     def initialize() {
         def project = this.getProject();
         POEditorExtension extension = project.poeditor;
-        new PullTaskWithEmptyFileFix().configure(extension.toConfig()).handle();
+        new PullTaskFixed().configure(extension.toConfig()).handle();
     }
 }
 
@@ -145,7 +141,7 @@ class PushTaskGradle extends DefaultTask {
         arguments.put("override", (String) props.get("override"));
 
         POEditorExtension extension = project.poeditor;
-        def task = new PushTask();
+        def task = new PushTaskFixed();
         task.configure(extension.toConfig(), arguments);
         task.handle();
     }
@@ -156,7 +152,7 @@ class PushTermsTaskGradle extends DefaultTask {
     def initialize() {
         def project = this.getProject();
         POEditorExtension extension = project.poeditor;
-        new PushTermsTask().configure(extension.toConfig()).handle();
+        new PushTermsTaskFixed().configure(extension.toConfig()).handle();
     }
 }
 

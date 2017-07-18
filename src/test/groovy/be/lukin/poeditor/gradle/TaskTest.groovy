@@ -8,8 +8,8 @@ import static org.junit.Assert.*
 class TaskTest {
     @Test
     public void canAddTaskToProject() {
-        Project project = ProjectBuilder.builder().build()
-        
+        Project project = ProjectBuilder.builder().withProjectDir(new File(System.getProperty("user.dir"))).build()
+
         def task1 = project.task('poeditorInit', type: InitTaskGradle)
         assertTrue(task1 instanceof InitTaskGradle)
         
