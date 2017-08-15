@@ -82,6 +82,7 @@ poeditor {
 
 and keep the translation values in the flavors:
 
+```
     productFlavors {
         'myflavor' {
             ...
@@ -98,7 +99,36 @@ and keep the translation values in the flavors:
             }
        }
     }
+```
 
+in case plugin is used in non-Android project, flavors can be added using sourceSets:
+
+apply java before poeditor:
+
+```
+apply plugin: 'java'
+```
+
+and keep the translation values in the sourceSets:
+
+```
+    sourceSets {
+        'myflavor' {
+            ...
+            project.poeditor {
+                    variant 'myflavor'
+                    projectId 'your project id here'
+                    terms 'App/src/main/res/values/strings.xml'
+                    trans 'en', 'App/src/myflavor/res/values/strings.xml'
+                    trans 'nl', 'App/src/myflavor/res/values-nl/strings.xml'
+                    trans 'fr', 'App/src/myflavor/res/values-fr/strings.xml'
+
+                    filters 'nl', 'translated'
+                    filters 'fr', 'translated, automatic'
+            }
+       }
+    }
+```
 
 
 3. Usage
