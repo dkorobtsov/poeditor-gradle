@@ -8,7 +8,7 @@ import org.gradle.api.tasks.TaskAction
 
 class POEditorPlugin implements Plugin<Project> {
     public static final String GROUP = 'POEditor translations'
-    
+
     @Override
     void apply(Project project) {
         //project.setGroup()
@@ -18,6 +18,8 @@ class POEditorPlugin implements Plugin<Project> {
         project.extensions.create("poeditor", POEditorExtension)
 
         def android = project.extensions.findByName("android")
+        def sourceSets = project.sourceSets
+
 
         // Define tasks
         project.task("poeditorInit",
@@ -26,13 +28,29 @@ class POEditorPlugin implements Plugin<Project> {
                 description: "Initialization: create terms & languages")
         if (android != null) {
             android.productFlavors.
-                    all { flavor -> project.task("poeditorInit${flavor.name}",
-                            type: InitTaskGradle,
-                            group: GROUP,
-                            description: "Initialization: create terms & languages for ${flavor.name}") {
+                    all { flavor ->
+                        project.task("poeditorInit${flavor.name}",
+                                type: InitTaskGradle,
+                                group: GROUP,
+                                description: "Initialization: create terms & languages for ${flavor.name}") {
                             doFirst() {
                                 project.poeditor {
                                     variant flavor.name
+                                }
+                            }
+                        }
+                    }
+        }
+        if (sourceSets != null) {
+            project.sourceSets.
+                    all { sourceSet ->
+                        project.task("poeditorInit${sourceSet.name}",
+                                type: InitTaskGradle,
+                                group: GROUP,
+                                description: "Initialization: create terms & languages for ${sourceSet.name}") {
+                            doFirst() {
+                                project.poeditor {
+                                    variant sourceSet.name
                                 }
                             }
                         }
@@ -45,62 +63,112 @@ class POEditorPlugin implements Plugin<Project> {
                 description: "Upload translations")
         if (android != null) {
             android.productFlavors.
-                    all { flavor -> project.task("poeditorPush${flavor.name}",
-                            type: PushTaskGradle,
-                            group: GROUP,
-                            description: "Upload translations for ${flavor.name}") {
-                        doFirst() {
-                            project.poeditor {
-                                variant flavor.name
+                    all { flavor ->
+                        project.task("poeditorPush${flavor.name}",
+                                type: PushTaskGradle,
+                                group: GROUP,
+                                description: "Upload translations for ${flavor.name}") {
+                            doFirst() {
+                                project.poeditor {
+                                    variant flavor.name
+                                }
                             }
                         }
-                      }
                     }
         }
-        
+        if (sourceSets != null) {
+            project.sourceSets.
+                    all { sourceSet ->
+                        project.task("poeditorPush${sourceSet.name}",
+                                type: PushTaskGradle,
+                                group: GROUP,
+                                description: "Upload translations for ${sourceSet.name}") {
+                            doFirst() {
+                                project.poeditor {
+                                    variant sourceSet.name
+                                }
+                            }
+                        }
+                    }
+        }
+
+
         project.task("poeditorPushTerms",
                 type: PushTermsTaskGradle,
-                group: GROUP, 
+                group: GROUP,
                 description: "Upload terms")
         if (android != null) {
             android.productFlavors.
-                    all { flavor -> project.task("poeditorPushTerms${flavor.name}",
-                            type: PushTermsTaskGradle,
-                            group: GROUP,
-                            description: "Upload terms for ${flavor.name}") {
-                        doFirst() {
-                            project.poeditor {
-                                variant flavor.name
+                    all { flavor ->
+                        project.task("poeditorPushTerms${flavor.name}",
+                                type: PushTermsTaskGradle,
+                                group: GROUP,
+                                description: "Upload terms for ${flavor.name}") {
+                            doFirst() {
+                                project.poeditor {
+                                    variant flavor.name
+                                }
                             }
                         }
-                      }
                     }
         }
-        
+        if (sourceSets != null) {
+            project.sourceSets.
+                    all { sourceSet ->
+                        project.task("poeditorPushTerms${sourceSet.name}",
+                                type: PushTermsTaskGradle,
+                                group: GROUP,
+                                description: "Upload terms for ${sourceSet.name}") {
+                            doFirst() {
+                                project.poeditor {
+                                    variant sourceSet.name
+                                }
+                            }
+                        }
+                    }
+        }
+
         project.task("poeditorPull",
                 type: PullTaskGradle,
-                group: GROUP, 
+                group: GROUP,
                 description: "Download translations")
         if (android != null) {
             android.productFlavors.
-                    all { flavor -> project.task("poeditorPull${flavor.name}",
-                            type: PullTaskGradle,
-                            group: GROUP,
-                            description: "Download translations for ${flavor.name}") {
-                        doFirst() {
-                            project.poeditor {
-                                variant flavor.name
+                    all { flavor ->
+                        project.task("poeditorPull${flavor.name}",
+                                type: PullTaskGradle,
+                                group: GROUP,
+                                description: "Download translations for ${flavor.name}") {
+                            doFirst() {
+                                project.poeditor {
+                                    variant flavor.name
+                                }
                             }
                         }
-                      }
                     }
         }
-        
+        if (sourceSets != null) {
+            project.sourceSets.
+                    all { sourceSet ->
+                        project.task("poeditorPull${sourceSet.name}",
+                                type: PullTaskGradle,
+                                group: GROUP,
+                                description: "Download translations for ${sourceSet.name}") {
+                            doFirst() {
+                                project.poeditor {
+                                    variant sourceSet.name
+                                }
+                            }
+                        }
+                    }
+        }
+
         project.task("poeditorStatus",
                 type: StatusTaskGradle,
                 group: GROUP,
                 description: "Existing project configuration in a more human readable format")
     }
+
 }
 
 class InitTaskGradle extends DefaultTask {
@@ -127,7 +195,7 @@ class PushTaskGradle extends DefaultTask {
      *  - languages: a list of languages that you want to upload, default: all
      *  - override: force to override languages, default: false
      *  - noSleep: after each upload the task sleeps for 30 seconds. With this param you can disable it, default: false
-     * 
+     *
      * Execute: gradle poeditorPush -Planguages=nl,fr -PnoSleep=true -Poverride=true
      * Execute: gradle poeditorPush --project-prop languages=nl,fr --project-prop noSleep=true
      */
