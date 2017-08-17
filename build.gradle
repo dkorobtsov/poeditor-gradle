@@ -15,7 +15,7 @@ targetCompatibility = 1.7
 
 // Artifact settings
 group = 'be.lukin.poeditor'
-version='0.3.3'
+version='0.3.5'
 archivesBaseName = 'gradle'
 
 def _name = 'Gradle Plugin for POEditor'

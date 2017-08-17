@@ -28,15 +28,6 @@ public final class PullTaskFixed extends BaseTask {
             File f = client.export(config.getProjectId(), languageKey, fte, filters, exportFile, config.getTagsPull());
             System.out.println(" - Trans " + languageKey + ": " + path);
             System.out.println(" - Filters " + languageKey + ": " + Arrays.toString(filters));
-            if (f == null) {
-                System.out.println(" - No file was created");
-            } else if (f.length() == 0) {
-                if (!f.delete()) {
-                    throw new RuntimeException("Failed to delete empty file " + f);
-                }
-                System.out.println(" - File was empty, deleted " + f);
-            }
-            System.out.println();
         }
     }
 }

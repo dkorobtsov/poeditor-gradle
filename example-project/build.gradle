@@ -5,30 +5,38 @@
  */
 buildscript {
     repositories {
-        maven { url uri('../build/repo') }
+        maven { url uri('../build/libs') }
         mavenLocal()
         mavenCentral()
     }
     dependencies {
-        classpath 'be.lukin.poeditor:gradle:0.3.3'
+        classpath 'be.lukin.poeditor:gradle:0.3.5'
     }
 }
 
+apply plugin: 'java-base'
 apply plugin: 'poeditor'
 
 poeditor {
-    apikey this.properties['poeditor.apiKey']
-    projectId this.properties['poeditor.projectId']
+    apikey '18dc8399b39a8a92af5188bba2d11422'
     type 'android_strings'
-    //tagsNew "2.2", "vt"
+    tagsNew '1.0'
+}
 
-    terms 'App/src/main/res/values/strings.xml'
-    trans 'en', 'App/src/main/res/values/strings.xml'
-    trans 'nl', 'App/src/main/res/values-nl/strings.xml'
-    trans 'fr', 'App/src/main/res/values-fr/strings.xml'
-    trans 'pl', 'App/src/poland/res/values-pl/strings.xml'
+sourceSets {
+    'android' {
+        project.poeditor {
+            variant 'android'
+            projectId '117681'
+            terms '/src/main/resources/androidStrings/english.xml'
+            trans 'en', '/src/main/resources/androidStrings/english.xml'
+            trans 'ar', '/src/main/resources/androidStrings/arabic.xml'
+            trans 'fr', '/src/main/resources/androidStrings/french.xml'
+            trans 'es', '/src/main/resources/androidStrings/spanish.xml'
 
-    // 'translated', 'untranslated', 'fuzzy', 'not_fuzzy', 'automatic', 'not_automatic', 'proofread', 'not_proofread'
-    filters 'nl', 'translated'
-    filters 'fr', 'translated,automatic'
+            filters 'ar', 'translated'
+            filters 'fr', 'translated'
+            filters 'es', 'translated'
+        }
+    }
 }

@@ -11,10 +11,11 @@ class PluginTest {
     public void poeditorPluginAddsTasksToProject() {
         
         Project project = ProjectBuilder.builder().build()
+        project.apply plugin: 'java-base'
         project.apply plugin: 'poeditor'
         
         def container = project.tasks
-        assertEquals(5, container.size())
+        assertEquals(11, container.size())
         
         // Random task
         assertTrue(container.findByName('poeditor42') == null)
